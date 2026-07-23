@@ -1,3 +1,142 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ─── Agiliza Design System — Global Styles ────────────────────────────────── */
+
+@layer base {
+  :root {
+    /* Surface tokens */
+    --color-surface-primary: #ffffff;
+    --color-surface-secondary: #f9fafb;
+    --color-surface-tertiary: #f3f4f6;
+    --color-surface-elevated: #ffffff;
+    --color-surface-overlay: rgba(0, 0, 0, 0.5);
+
+    /* Background tokens */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f9fafb;
+    --color-bg-tertiary: #f3f4f6;
+
+    /* Text tokens */
+    --color-text-primary: #18181b;
+    --color-text-secondary: #52525b;
+    --color-text-tertiary: #a1a1aa;
+    --color-text-inverse: #ffffff;
+    --color-text-link: #7c3aed;
+
+    /* Border tokens */
+    --color-border-default: #e4e4e7;
+    --color-border-strong: #d4d4d8;
+    --color-border-focus: #8b5cf6;
+    --color-border-error: #ef4444;
+    --color-border-success: #22c55e;
+  }
+
+  .dark {
+    /* Surface tokens */
+    --color-surface-primary: #09090b;
+    --color-surface-secondary: #18181b;
+    --color-surface-tertiary: #27272a;
+    --color-surface-elevated: #1c1c1e;
+    --color-surface-overlay: rgba(0, 0, 0, 0.7);
+
+    /* Background tokens */
+    --color-bg-primary: #09090b;
+    --color-bg-secondary: #18181b;
+    --color-bg-tertiary: #27272a;
+
+    /* Text tokens */
+    --color-text-primary: #fafafa;
+    --color-text-secondary: #a1a1aa;
+    --color-text-tertiary: #71717a;
+    --color-text-inverse: #18181b;
+    --color-text-link: #a78bfa;
+
+    /* Border tokens */
+    --color-border-default: #27272a;
+    --color-border-strong: #3f3f46;
+    --color-border-focus: #8b5cf6;
+    --color-border-error: #f87171;
+    --color-border-success: #4ade80;
+  }
+}
+
+@layer components {
+  /* ─── Touchable Opacity Base ─────────────────────────────────────────── */
+  .pressable-base {
+    active:opacity-80;
+  }
+
+  /* ─── Safe Area Padding ──────────────────────────────────────────────── */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* ─── Screen Container ───────────────────────────────────────────────── */
+  .screen-container {
+    @apply flex-1 bg-white;
+  }
+
+  .screen-padding {
+    @apply px-4;
+  }
+
+  /* ─── Typography Utilities ───────────────────────────────────────────── */
+  .font-outfit {
+    font-family: "Outfit-Regular";
+  }
+
+  .font-inter {
+    font-family: "Inter-Regular";
+  }
+}
+
+@layer utilities {
+  /* ─── Text Colors (Dark Mode Aware) ──────────────────────────────────── */
+  .text-surface {
+    color: var(--color-text-primary);
+  }
+
+  .text-surface-secondary {
+    color: var(--color-text-secondary);
+  }
+
+  .text-surface-tertiary {
+    color: var(--color-text-tertiary);
+  }
+
+  /* ─── Background Colors (Dark Mode Aware) ────────────────────────────── */
+  .bg-surface {
+    background-color: var(--color-surface-primary);
+  }
+
+  .bg-surface-secondary {
+    background-color: var(--color-surface-secondary);
+  }
+
+  .bg-surface-elevated {
+    background-color: var(--color-surface-elevated);
+  }
+
+  /* ─── Border Colors (Dark Mode Aware) ────────────────────────────────── */
+  .border-surface {
+    border-color: var(--color-border-default);
+  }
+
+  .border-surface-strong {
+    border-color: var(--color-border-strong);
+  }
+}
