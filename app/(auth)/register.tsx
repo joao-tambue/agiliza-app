@@ -1,51 +1,109 @@
-import { View, Text } from "react-native";
+import { Button, Input } from "@/components";
 import { Link } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Lock, Mail, User } from "lucide-react-native";
+import React, { useState } from "react";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 export default function RegisterScreen() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  function handleRegister() {
+    setLoading(true);
+    // TODO: integrar com auth
+    setTimeout(() => setLoading(false), 1500);
+  }
+
   return (
-    <View className="flex-1 bg-white px-6 pt-16">
-      <Text className="text-display-md font-outfit text-neutral-900 mb-2">
-        Criar conta
-      </Text>
+    <SafeAreaView className="flex-1 bg-white">
+      <StatusBar style="dark" />
 
-      <Text className="text-body-md text-neutral-500 mb-8">
-        Preencha os dados para começar.
-      </Text>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingHorizontal: 24,
+            paddingBottom: 32,
+          }}
+        >
+          <View className="flex-1 items-center justify-center">
+            <View className="mb-10 items-center">
+              <Image
+                source={require("@/assets/iluu/check-mark.png")}
+                className="h-[92px] w-[92px]"
+                resizeMode="contain"
+              />
+            </View>
 
-      <View className="gap-4">
-        <View className="bg-neutral-100 rounded-xl px-4 py-4">
-          <Text className="text-neutral-400">Nome completo</Text>
-        </View>
+            <Text className="mb-8 text-lg font-medium text-neutral-800">
+              Criar uma conta
+            </Text>
 
-        <View className="bg-neutral-100 rounded-xl px-4 py-4">
-          <Text className="text-neutral-400">Email</Text>
-        </View>
+            <View className="w-full">
+              <Input
+                label="Nome de usuario"
+                placeholder="Digite o seu nome de usuario"
+                value={name}
+                onChangeText={setName}
+                leftIcon={<User size={18} color="#D4D4D8" />}
+              />
 
-        <View className="bg-neutral-100 rounded-xl px-4 py-4">
-          <Text className="text-neutral-400">Telefone</Text>
-        </View>
+              <Input
+                label="Email ou numero de telefone"
+                placeholder="Digite o seu email ou numero de tel"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={email}
+                onChangeText={setEmail}
+                leftIcon={<Mail size={18} color="#D4D4D8" />}
+              />
 
-        <View className="bg-neutral-100 rounded-xl px-4 py-4">
-          <Text className="text-neutral-400">Senha</Text>
-        </View>
+              <Input
+                label="Senha"
+                placeholder="Digite a sua senha"
+                variant="password"
+                value={password}
+                onChangeText={setPassword}
+                leftIcon={<Lock size={18} color="#D4D4D8" />}
+              />
 
-        <View className="bg-primary-600 rounded-xl py-4 items-center mt-2">
-          <Text className="text-white text-base font-semibold">
-            Criar conta
-          </Text>
-        </View>
-      </View>
+              <View className="mt-3">
+                <Button
+                  title="Registrar"
+                  fullWidth
+                  loading={loading}
+                  onPress={handleRegister}
+                />
+              </View>
+            </View>
 
-      <View className="flex-row items-center justify-center mt-6">
-        <Text className="text-body-sm text-neutral-500">
-          Já tem conta?{" "}
-        </Text>
-        <Link href="/(auth)/login" asChild>
-          <Text className="text-body-sm text-primary-600 font-semibold">
-            Entrar
-          </Text>
-        </Link>
-      </View>
-    </View>
+            <View className="mt-6 flex-row items-center justify-center">
+              <Text className="text-sm text-neutral-500">Ja tem conta? </Text>
+              <Link href="/(auth)/login" asChild>
+                <Text className="text-sm font-semibold text-primary-600">
+                  Entrar
+                </Text>
+              </Link>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }

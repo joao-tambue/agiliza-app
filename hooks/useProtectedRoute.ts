@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useRouter, useSegments } from "expo-router";
+import { useRouter, useSegments, useRootNavigationState } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 
 /**
@@ -12,18 +12,17 @@ export function useProtectedRoute() {
   const { isAuthenticated, isLoading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const rootState = useRootNavigationState();
 
   useEffect(() => {
-    if (isLoading) return;
+    if (isLoading || !rootState) return;
 
     const inAuthGroup = segments[0] === "(auth)";
 
     if (!isAuthenticated && !inAuthGroup) {
-      // Usuário não autenticado → redirecionar para auth
-      router.replace("/(auth)/onboarding");
+      router.replace("/(auth)/login");
     } else if (isAuthenticated && inAuthGroup) {
-      // Usuário autenticado → redirecionar para main
       router.replace("/(main)");
     }
-  }, [isAuthenticated, isLoading, segments]);
+  }, [isAuthenticated, isLoading, segments, rootState]);
 }
