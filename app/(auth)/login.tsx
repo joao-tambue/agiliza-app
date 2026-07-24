@@ -1,51 +1,118 @@
-import { View, Text } from "react-native";
+import { Button, Input } from "@/components";
 import { Link } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Lock, Mail } from "lucide-react-native";
+import React, { useState } from "react";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 export default function LoginScreen() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  function handleLogin() {
+    setLoading(true);
+    // TODO: integrar com auth
+    setTimeout(() => setLoading(false), 1500);
+  }
+
   return (
-    <View className="flex-1 bg-white px-6 pt-16">
-      <Text className="text-display-md font-outfit text-neutral-900 mb-2">
-        Entrar
-      </Text>
+    <SafeAreaView className="flex-1 bg-white">
+      <StatusBar style="dark" />
 
-      <Text className="text-body-md text-neutral-500 mb-8">
-        Bem-vindo de volta! Faça login para continuar.
-      </Text>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingHorizontal: 24,
+            paddingBottom: 32,
+          }}
+        >
+          <View className="flex-1 items-center justify-center">
+            <View className="mb-10 items-center">
+              <View
+                className="h-[92px] w-[92px] items-center justify-center rounded-full bg-primary-100"
+                style={{
+                  shadowColor: "#7c3aed",
+                  shadowOpacity: 0.08,
+                  shadowRadius: 14,
+                  shadowOffset: { width: 0, height: 4 },
+                  elevation: 2,
+                }}
+              >
+                <View className="h-[68px] w-[68px] items-center justify-center rounded-full bg-primary-600">
+                  <Lock size={28} color="#FFFFFF" />
+                </View>
+              </View>
+            </View>
 
-      <View className="gap-4">
-        <View className="bg-neutral-100 rounded-xl px-4 py-4">
-          <Text className="text-neutral-400">Email</Text>
-        </View>
+            <Text className="mb-2 text-lg font-medium text-neutral-800">
+              Entrar
+            </Text>
 
-        <View className="bg-neutral-100 rounded-xl px-4 py-4">
-          <Text className="text-neutral-400">Senha</Text>
-        </View>
+            <Text className="mb-8 text-sm text-neutral-500">
+              Bem-vindo de volta! Faca login para continuar.
+            </Text>
 
-        <View className="bg-primary-600 rounded-xl py-4 items-center mt-2">
-          <Text className="text-white text-base font-semibold">
-            Entrar
-          </Text>
-        </View>
-      </View>
+            <View className="w-full">
+              <Input
+                label="Email ou numero de telefone"
+                placeholder="Digite o seu email ou numero de tel"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={email}
+                onChangeText={setEmail}
+                leftIcon={<Mail size={18} color="#D4D4D8" />}
+              />
 
-      <View className="flex-row items-center justify-center mt-6">
-        <Text className="text-body-sm text-neutral-500">
-          Não tem conta?{" "}
-        </Text>
-        <Link href="/(auth)/register" asChild>
-          <Text className="text-body-sm text-primary-600 font-semibold">
-            Criar conta
-          </Text>
-        </Link>
-      </View>
+              <Input
+                label="Senha"
+                placeholder="Digite a sua senha"
+                variant="password"
+                value={password}
+                onChangeText={setPassword}
+                leftIcon={<Lock size={18} color="#D4D4D8" />}
+              />
 
-      <View className="items-center mt-4">
-        <Link href="/(auth)/forgot-password" asChild>
-          <Text className="text-body-sm text-primary-600">
-            Esqueceu a senha?
-          </Text>
-        </Link>
-      </View>
-    </View>
+              <View className="mb-2 flex-row justify-end">
+                <Link href="/(auth)/forgot-password" asChild>
+                  <Text className="text-xs font-medium text-primary-600">
+                    Esqueceu a senha?
+                  </Text>
+                </Link>
+              </View>
+
+              <Button
+                title="Entrar"
+                fullWidth
+                loading={loading}
+                onPress={handleLogin}
+              />
+            </View>
+
+            <View className="mt-6 flex-row items-center justify-center">
+              <Text className="text-sm text-neutral-500">Nao tem conta? </Text>
+              <Link href="/(auth)/register" asChild>
+                <Text className="text-sm font-semibold text-primary-600">
+                  Criar conta
+                </Text>
+              </Link>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
