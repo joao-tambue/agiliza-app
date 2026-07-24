@@ -1,4 +1,5 @@
 import { Chip } from "@/components";
+import { useRouter } from "expo-router";
 import { Bell, MapPin, Search, Star } from "lucide-react-native";
 import React, { useState } from "react";
 import {
@@ -67,6 +68,7 @@ const filters = [
 export default function HomeScreen() {
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
+  const router = useRouter();
 
   return (
     <SafeAreaView className="flex-1 bg-[#F7F7F8]" edges={["top"]}>
@@ -76,7 +78,6 @@ export default function HomeScreen() {
       >
         {/* HERO */}
         <View className="bg-[#4F46E5] overflow-hidden rounded-b-[32px]">
-          {/* TODO: adicionar header-reflection.png em assets/images/ */}
           <Image
             source={require("@/assets/iluu/Texture.png")}
             resizeMode="cover"
@@ -106,7 +107,10 @@ export default function HomeScreen() {
                 </View>
               </View>
 
-              <TouchableOpacity className="h-12 w-12 items-center justify-center bg-white/20 rounded-full">
+              <TouchableOpacity
+                onPress={() => router.push("/(main)/notifications")}
+                className="h-12 w-12 items-center justify-center bg-white/20 rounded-full"
+              >
                 <Bell size={24} color="#fff" />
                 <View className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-500" />
               </TouchableOpacity>

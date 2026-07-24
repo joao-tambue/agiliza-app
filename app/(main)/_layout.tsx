@@ -8,6 +8,10 @@ export default function MainLayout() {
       }}
     >
       <Stack.Screen name="(tabs)" />
+      <Stack.Screen
+        name="notifications"
+        options={{ animation: "slide_from_right" }}
+      />
     </Stack>
   );
 }
