@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useRouter, useSegments, useRootNavigationState } from "expo-router";
+import { useEffect, useState } from "react";
+import { useRouter, useSegments } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 
 /**
@@ -12,10 +12,14 @@ export function useProtectedRoute() {
   const { isAuthenticated, isLoading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
-  const rootState = useRootNavigationState();
+  const [isLayoutReady, setIsLayoutReady] = useState(false);
 
   useEffect(() => {
-    if (isLoading || !rootState) return;
+    setIsLayoutReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (isLoading || !isLayoutReady) return;
 
     const inAuthGroup = segments[0] === "(auth)";
 
@@ -24,5 +28,5 @@ export function useProtectedRoute() {
     } else if (isAuthenticated && inAuthGroup) {
       router.replace("/(main)");
     }
-  }, [isAuthenticated, isLoading, segments, rootState]);
+  }, [isAuthenticated, isLoading, segments, isLayoutReady, router]);
 }

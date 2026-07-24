@@ -1,4 +1,5 @@
 import { Button, Input } from "@/components";
+import { useAuth } from "@/context/AuthContext";
 import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Lock, Mail } from "lucide-react-native";
@@ -15,12 +16,10 @@ import {
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { signIn, isLoading } = useAuth();
 
   function handleLogin() {
-    setLoading(true);
-    // TODO: integrar com auth
-    setTimeout(() => setLoading(false), 1500);
+    signIn(email, password);
   }
 
   return (
@@ -97,7 +96,7 @@ export default function LoginScreen() {
               <Button
                 title="Entrar"
                 fullWidth
-                loading={loading}
+                loading={isLoading}
                 onPress={handleLogin}
               />
             </View>
