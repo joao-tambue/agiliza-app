@@ -10,6 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Star, MapPin, Bell } from "lucide-react-native";
 import { SearchBar, Chip, EmptySearch } from "@/components";
+import { mamas } from "@/data/mamas";
 
 const categories = [
   { key: "all", label: "Todos" },
@@ -18,60 +19,12 @@ const categories = [
   { key: "rating", label: "Melhor avaliacao" },
 ];
 
-const allMamas = [
-  {
-    id: 1,
-    name: "Mama Maria",
-    location: "Vila de Cacuaco",
-    profession: "Lavadeira",
-    rating: 5.0,
-    services: 10,
-    image: "https://images.unsplash.com/photo-1589156191108-c762ff4b96ab?w=600",
-  },
-  {
-    id: 2,
-    name: "Mama Joana",
-    location: "Vila de Benfica",
-    profession: "Lavadeira",
-    rating: 4.9,
-    services: 8,
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600",
-  },
-  {
-    id: 3,
-    name: "Mama Rosa",
-    location: "Vila de Viana",
-    profession: "Lavadeira",
-    rating: 4.7,
-    services: 12,
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600",
-  },
-  {
-    id: 4,
-    name: "Mama Odeth",
-    location: "Vila de Cacuaco",
-    profession: "Lavadeira",
-    rating: 4.5,
-    services: 6,
-    image: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=600",
-  },
-  {
-    id: 5,
-    name: "Mama Priss",
-    location: "Vila de Viana",
-    profession: "Lavadeira",
-    rating: 4.8,
-    services: 15,
-    image: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=600",
-  },
-];
-
 export default function SearchTab() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const router = useRouter();
 
-  const filtered = allMamas.filter((m) => {
+  const filtered = mamas.filter((m) => {
     if (!search) return true;
     const q = search.toLowerCase();
     return (
@@ -139,6 +92,7 @@ export default function SearchTab() {
             {filtered.map((mama) => (
               <TouchableOpacity
                 key={mama.id}
+                onPress={() => router.push(`/(main)/mama/${mama.id}`)}
                 className="mb-4 flex-row items-center rounded-3xl bg-white p-4 shadow-sm"
               >
                 <Image

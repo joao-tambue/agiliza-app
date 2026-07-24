@@ -1,4 +1,5 @@
 import { Chip } from "@/components";
+import { mamas } from "@/data/mamas";
 import { useRouter } from "expo-router";
 import { Bell, MapPin, Search, Star } from "lucide-react-native";
 import React, { useState } from "react";
@@ -12,52 +13,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const featuredMamas = [
-  {
-    id: 1,
-    name: "Mama Odeth",
-    location: "Vila de Cacuaco",
-    rating: 4.5,
-    image: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=600",
-  },
-  {
-    id: 2,
-    name: "Mama Priss",
-    location: "Vila de Viana",
-    rating: 4.8,
-    image: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=600",
-  },
-];
-
-const allMamas = [
-  {
-    id: 1,
-    name: "Mama Maria",
-    location: "Vila de Cacuaco",
-    profession: "Lavadeira",
-    rating: 5.0,
-    services: 10,
-    image: "https://images.unsplash.com/photo-1589156191108-c762ff4b96ab?w=600",
-  },
-  {
-    id: 2,
-    name: "Mama Joana",
-    location: "Vila de Benfica",
-    profession: "Lavadeira",
-    rating: 4.9,
-    services: 8,
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600",
-  },
-  {
-    id: 3,
-    name: "Mama Rosa",
-    location: "Vila de Viana",
-    profession: "Lavadeira",
-    rating: 4.7,
-    services: 12,
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600",
-  },
-];
+const featuredMamas = mamas.filter((m) => [4, 5].includes(m.id));
 
 const filters = [
   { key: "all", label: "Todos" },
@@ -145,12 +101,7 @@ export default function HomeScreen() {
               selected={activeFilter === f.key}
               onPress={() => setActiveFilter(f.key)}
               leftIcon={
-                f.key === "all" ? (
-                  <MapPin
-                    size={16}
-                    color={activeFilter === f.key ? "#fff" : "#666"}
-                  />
-                ) : f.key === "proximity" ? (
+                f.key === "all" || f.key === "proximity" ? (
                   <MapPin
                     size={16}
                     color={activeFilter === f.key ? "#fff" : "#666"}
@@ -183,7 +134,11 @@ export default function HomeScreen() {
             }}
           >
             {featuredMamas.map((mama) => (
-              <TouchableOpacity key={mama.id} className="mr-4 w-[170px]">
+              <TouchableOpacity
+                key={mama.id}
+                onPress={() => router.push(`/(main)/mama/${mama.id}`)}
+                className="mr-4 w-[170px]"
+              >
                 <Image
                   source={{ uri: mama.image }}
                   className="h-[160px] w-full rounded-3xl"
@@ -223,9 +178,10 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
 
-          {allMamas.map((mama) => (
+          {mamas.map((mama) => (
             <TouchableOpacity
               key={mama.id}
+              onPress={() => router.push(`/(main)/mama/${mama.id}`)}
               className="mb-4 flex-row items-center rounded-3xl bg-white p-4 shadow-sm"
             >
               <Image
@@ -248,9 +204,6 @@ export default function HomeScreen() {
                   </Text>
                 </View>
               </View>
-              <TouchableOpacity>
-                <Text className="text-2xl text-[#A0A0A0]">...</Text>
-              </TouchableOpacity>
             </TouchableOpacity>
           ))}
         </View>

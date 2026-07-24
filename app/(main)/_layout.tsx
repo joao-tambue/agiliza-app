@@ -12,6 +12,10 @@ export default function MainLayout() {
         name="notifications"
         options={{ animation: "slide_from_right" }}
       />
+      <Stack.Screen
+        name="mama/[id]"
+        options={{ animation: "slide_from_right" }}
+      />
     </Stack>
   );
 }

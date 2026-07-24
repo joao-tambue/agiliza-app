@@ -10,27 +10,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Star, Heart, Bell } from "lucide-react-native";
 import { EmptyFavorites } from "@/components";
+import { mamas } from "@/data/mamas";
 
-const favoriteMamas = [
-  {
-    id: 1,
-    name: "Mama Maria",
-    location: "Vila de Cacuaco",
-    profession: "Lavadeira",
-    rating: 5.0,
-    services: 10,
-    image: "https://images.unsplash.com/photo-1589156191108-c762ff4b96ab?w=600",
-  },
-  {
-    id: 2,
-    name: "Mama Priss",
-    location: "Vila de Viana",
-    profession: "Lavadeira",
-    rating: 4.8,
-    services: 15,
-    image: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=600",
-  },
-];
+const favoriteMamas = mamas.filter((m) => [1, 5].includes(m.id));
 
 export default function FavoritesTab() {
   const hasFavorites = favoriteMamas.length > 0;
@@ -64,6 +46,7 @@ export default function FavoritesTab() {
           {favoriteMamas.map((mama) => (
             <TouchableOpacity
               key={mama.id}
+              onPress={() => router.push(`/(main)/mama/${mama.id}`)}
               className="mb-4 flex-row items-center rounded-3xl bg-white p-4 shadow-sm"
             >
               <Image
