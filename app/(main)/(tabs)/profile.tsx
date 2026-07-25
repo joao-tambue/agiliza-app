@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -20,6 +21,7 @@ import {
   Star,
 } from "lucide-react-native";
 import { useAuth } from "@/context/AuthContext";
+import { Modal, Button } from "@/components";
 
 const menuSections = [
   {
@@ -47,8 +49,14 @@ const menuSections = [
 ];
 
 export default function ProfileTab() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, isLoading } = useAuth();
   const router = useRouter();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  async function handleLogout() {
+    setShowLogoutModal(false);
+    await signOut();
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-[#F7F7F8]" edges={["top"]}>
@@ -146,7 +154,7 @@ export default function ProfileTab() {
         {/* LOGOUT */}
         <View className="mx-5 mt-2">
           <TouchableOpacity
-            onPress={signOut}
+            onPress={() => setShowLogoutModal(true)}
             className="flex-row items-center justify-center rounded-2xl border border-red-100 bg-white py-4"
           >
             <LogOut size={20} color="#EF4444" />
@@ -156,6 +164,35 @@ export default function ProfileTab() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* LOGOUT MODAL */}
+      <Modal
+        visible={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        title="Terminar sessao"
+        showCloseButton={false}
+      >
+        <Text className="text-sm leading-5 text-neutral-500 mb-6">
+          Tem certeza que deseja terminar a sessao? Precisara voltar a entrar
+          para aceder a sua conta.
+        </Text>
+
+        <View className="gap-3">
+          <Button
+            title="Terminar sessao"
+            variant="danger"
+            fullWidth
+            loading={isLoading}
+            onPress={handleLogout}
+          />
+          <Button
+            title="Cancelar"
+            variant="ghost"
+            fullWidth
+            onPress={() => setShowLogoutModal(false)}
+          />
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
