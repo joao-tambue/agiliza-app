@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSegments } from "expo-router";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "../store/useAuthStore";
 
 /**
- * Hook que redireciona automaticamente entre auth e main
- * baseado no estado de autenticação.
- *
- * Uso: chamar no _layout.tsx raiz.
+ * Hook that redirects between auth and main based on auth state.
+ * Also initializes the auth store on first mount.
  */
 export function useProtectedRoute() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isInitialized, initialize } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
   const [isLayoutReady, setIsLayoutReady] = useState(false);
+
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
 
   useEffect(() => {
     setIsLayoutReady(true);
   }, []);
 
   useEffect(() => {
-    if (isLoading || !isLayoutReady) return;
+    if (!isInitialized || !isLayoutReady) return;
 
     const inAuthGroup = segments[0] === "(auth)";
 
@@ -28,5 +30,5 @@ export function useProtectedRoute() {
     } else if (isAuthenticated && inAuthGroup) {
       router.replace("/(main)");
     }
-  }, [isAuthenticated, isLoading, segments, isLayoutReady, router]);
+  }, [isAuthenticated, isInitialized, segments, isLayoutReady, router]);
 }

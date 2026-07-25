@@ -2,12 +2,12 @@ openapi: 3.0.0
 info:
   title: Agiliza
   version: 1.0.0
-  description: API do projeto Agiliza APP para localização de lavadeiras e gerenciamento de usuários
+  description: API do projeto Agiliza APP
 
 servers:
   - url: http://localhost:3000
     description: Servidor local
-  - url: https://agiliza-backend-436a.onrender.com
+  - url: https://agliza-backend.onrender.com
     description: Servidor de produção
 
 components:

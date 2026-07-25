@@ -1,7 +1,9 @@
 import "../global.css";
 import { Stack } from "expo-router";
-import { AuthProvider } from "@/context/AuthContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useProtectedRoute } from "@/hooks/useProtectedRoute";
+
+const queryClient = new QueryClient();
 
 function RootLayoutInner() {
   useProtectedRoute();
@@ -16,8 +18,8 @@ function RootLayoutInner() {
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
+    <QueryClientProvider client={queryClient}>
       <RootLayoutInner />
-    </AuthProvider>
+    </QueryClientProvider>
   );
 }

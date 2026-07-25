@@ -20,7 +20,7 @@ import {
   Moon,
   Star,
 } from "lucide-react-native";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { Modal, Button } from "@/components";
 
 const menuSections = [
@@ -49,13 +49,13 @@ const menuSections = [
 ];
 
 export default function ProfileTab() {
-  const { user, signOut, isLoading } = useAuth();
+  const { user, logout, isLoading } = useAuth();
   const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   async function handleLogout() {
     setShowLogoutModal(false);
-    await signOut();
+    await logout();
   }
 
   return (
@@ -81,7 +81,7 @@ export default function ProfileTab() {
           <View className="flex-row items-center">
             <Image
               source={{
-                uri: user?.avatar || "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=600",
+                uri: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=600",
               }}
               className="h-16 w-16 rounded-full border-2 border-white/20"
             />
@@ -90,12 +90,12 @@ export default function ProfileTab() {
                 {user?.name || "Utilizador"}
               </Text>
               <Text className="mt-0.5 text-sm text-white/70">
-                {user?.email || "email@exemplo.com"}
+                {user?.phone || "Sem telefone"}
               </Text>
               <View className="mt-2 flex-row items-center">
                 <View className="rounded-full bg-white/20 px-3 py-1">
                   <Text className="text-xs font-medium text-white">
-                    {user?.role === "lavadeira" ? "Lavadeira" : "Cliente"}
+                    {user?.role === "LAVADEIRA" ? "Lavadeira" : "Cliente"}
                   </Text>
                 </View>
               </View>

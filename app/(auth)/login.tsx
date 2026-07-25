@@ -1,8 +1,8 @@
 import { Button, Input } from "@/components";
-import { useAuth } from "@/context/AuthContext";
+import { useLogin } from "@/hooks/useAuth";
 import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Lock, Mail } from "lucide-react-native";
+import { Lock, Phone } from "lucide-react-native";
 import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -14,12 +14,12 @@ import {
 } from "react-native";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const { signIn, isLoading } = useAuth();
+  const { handleLogin, isLoading, error } = useLogin();
 
-  function handleLogin() {
-    signIn(email, password);
+  function handleLoginPress() {
+    handleLogin(phone, password);
   }
 
   return (
@@ -66,14 +66,22 @@ export default function LoginScreen() {
             </Text>
 
             <View className="w-full">
+              {error && (
+                <View className="mb-3 rounded-lg bg-red-50 px-4 py-3">
+                  <Text className="text-center text-sm text-red-600">
+                    {error}
+                  </Text>
+                </View>
+              )}
+
               <Input
-                label="Email ou numero de telefone"
-                placeholder="Digite o seu email ou numero de tel"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
-                leftIcon={<Mail size={18} color="#D4D4D8" />}
+                label="Numero de telefone"
+                placeholder="9XX XXX XXX"
+                keyboardType="phone-pad"
+                autoComplete="tel"
+                value={phone}
+                onChangeText={setPhone}
+                leftIcon={<Phone size={18} color="#D4D4D8" />}
               />
 
               <Input
@@ -97,7 +105,7 @@ export default function LoginScreen() {
                 title="Entrar"
                 fullWidth
                 loading={isLoading}
-                onPress={handleLogin}
+                onPress={handleLoginPress}
               />
             </View>
 

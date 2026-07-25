@@ -1,7 +1,8 @@
-import { Button, Input } from "@/components";
+import { Button, Chip, Input } from "@/components";
+import { useRegister } from "@/hooks/useAuth";
 import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Lock, Mail, User } from "lucide-react-native";
+import { Lock, Phone, User } from "lucide-react-native";
 import React, { useState } from "react";
 import {
   Image,
@@ -12,17 +13,22 @@ import {
   Text,
   View,
 } from "react-native";
+import type { UserRole } from "@/api/types";
+
+const roleOptions: { key: UserRole; label: string; description: string }[] = [
+  { key: "CLIENT", label: "Cliente", description: "Contratar servicos" },
+  { key: "LAVADEIRA", label: "Lavadeira", description: "Oferecer servicos" },
+];
 
 export default function RegisterScreen() {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState<UserRole>("CLIENT");
+  const { handleRegister, isLoading, error } = useRegister();
 
-  function handleRegister() {
-    setLoading(true);
-    // TODO: integrar com auth
-    setTimeout(() => setLoading(false), 1500);
+  function handleRegisterPress() {
+    handleRegister({ name, phone, password, role });
   }
 
   return (
@@ -51,32 +57,59 @@ export default function RegisterScreen() {
               />
             </View>
 
-            <Text className="mb-8 text-lg font-medium text-neutral-800">
+            <Text className="mb-2 text-lg font-medium text-neutral-800">
               Criar uma conta
             </Text>
 
+            <Text className="mb-6 text-center text-sm text-neutral-500">
+              Escolha o tipo de conta e preencha os seus dados.
+            </Text>
+
             <View className="w-full">
+              {error && (
+                <View className="mb-3 rounded-lg bg-red-50 px-4 py-3">
+                  <Text className="text-center text-sm text-red-600">
+                    {error}
+                  </Text>
+                </View>
+              )}
+
+              <Text className="mb-2 text-sm font-medium text-neutral-700">
+                Tipo de conta
+              </Text>
+              <View className="mb-4 flex-row gap-3">
+                {roleOptions.map((option) => (
+                  <Chip
+                    key={option.key}
+                    label={option.label}
+                    variant="filter"
+                    selected={role === option.key}
+                    onPress={() => setRole(option.key)}
+                  />
+                ))}
+              </View>
+
               <Input
-                label="Nome de usuario"
-                placeholder="Digite o seu nome de usuario"
+                label="Nome completo"
+                placeholder="Digite o seu nome"
                 value={name}
                 onChangeText={setName}
                 leftIcon={<User size={18} color="#D4D4D8" />}
               />
 
               <Input
-                label="Email ou numero de telefone"
-                placeholder="Digite o seu email ou numero de tel"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
-                leftIcon={<Mail size={18} color="#D4D4D8" />}
+                label="Numero de telefone"
+                placeholder="9XX XXX XXX"
+                keyboardType="phone-pad"
+                autoComplete="tel"
+                value={phone}
+                onChangeText={setPhone}
+                leftIcon={<Phone size={18} color="#D4D4D8" />}
               />
 
               <Input
                 label="Senha"
-                placeholder="Digite a sua senha"
+                placeholder="Crie uma senha"
                 variant="password"
                 value={password}
                 onChangeText={setPassword}
@@ -87,8 +120,8 @@ export default function RegisterScreen() {
                 <Button
                   title="Registrar"
                   fullWidth
-                  loading={loading}
-                  onPress={handleRegister}
+                  loading={isLoading}
+                  onPress={handleRegisterPress}
                 />
               </View>
             </View>

@@ -1,7 +1,8 @@
 import { Button, Input } from "@/components";
-import { Link } from "expo-router";
+import { useForgotPassword } from "@/hooks/useAuth";
+import { Link, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { KeyRound, Mail } from "lucide-react-native";
+import { KeyRound, Phone } from "lucide-react-native";
 import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -13,13 +14,19 @@ import {
 } from "react-native";
 
 export default function ForgotPasswordScreen() {
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [phone, setPhone] = useState("");
+  const router = useRouter();
+  const { handleForgotPassword, isLoading, error, success } =
+    useForgotPassword();
 
-  function handleSendLink() {
-    setLoading(true);
-    // TODO: integrar com auth
-    setTimeout(() => setLoading(false), 1500);
+  function handleSendCode() {
+    handleForgotPassword(phone).then(() => {
+      // Navigate to reset-password screen with phone context
+      router.push({
+        pathname: "/(auth)/reset-password",
+        params: { phone },
+      });
+    });
   }
 
   return (
@@ -62,27 +69,43 @@ export default function ForgotPasswordScreen() {
             </Text>
 
             <Text className="mb-8 text-center text-sm text-neutral-500">
-              Insira o seu email e enviaremos um link para{"\n"}redefinir a sua
-              senha.
+              Insira o seu numero de telefone e enviaremos um{"\n"}codigo para
+              redefinir a sua senha.
             </Text>
 
             <View className="w-full">
+              {error && (
+                <View className="mb-3 rounded-lg bg-red-50 px-4 py-3">
+                  <Text className="text-center text-sm text-red-600">
+                    {error}
+                  </Text>
+                </View>
+              )}
+
+              {success && (
+                <View className="mb-3 rounded-lg bg-green-50 px-4 py-3">
+                  <Text className="text-center text-sm text-green-600">
+                    Codigo enviado! Verifique o seu telemovel.
+                  </Text>
+                </View>
+              )}
+
               <Input
-                label="Email"
-                placeholder="Digite o seu email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
-                leftIcon={<Mail size={18} color="#D4D4D8" />}
+                label="Numero de telefone"
+                placeholder="9XX XXX XXX"
+                keyboardType="phone-pad"
+                autoComplete="tel"
+                value={phone}
+                onChangeText={setPhone}
+                leftIcon={<Phone size={18} color="#D4D4D8" />}
               />
 
               <View className="mt-3">
                 <Button
-                  title="Enviar link"
+                  title="Enviar codigo"
                   fullWidth
-                  loading={loading}
-                  onPress={handleSendLink}
+                  loading={isLoading}
+                  onPress={handleSendCode}
                 />
               </View>
             </View>
