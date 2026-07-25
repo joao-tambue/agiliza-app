@@ -119,7 +119,7 @@ export default function HomeScreen() {
             <Text className="text-[22px] font-semibold text-[#1A1A1A]">
               Mamas em Destaque
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/(main)/all-mamas")}>
               <Text className="font-medium text-[#4F46E5]">Ver todas</Text>
             </TouchableOpacity>
           </View>
@@ -167,13 +167,12 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
 
-        {/* TODAS MAMAS */}
         <View className="mt-8 px-5">
           <View className="mb-4 flex-row items-center justify-between">
             <Text className="text-[22px] font-semibold text-[#1A1A1A]">
               Todas mamas
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/(main)/all-mamas")}>
               <Text className="font-medium text-[#4F46E5]">Ver todas</Text>
             </TouchableOpacity>
           </View>
