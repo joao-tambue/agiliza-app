@@ -12,33 +12,34 @@ import type {
   User,
 } from "./types";
 
+// ─── Auth API ─────────────────────────────────────────────────────────────────
+
 export const authApi = {
   async register(input: RegisterInput): Promise<AuthRegisterResponse> {
-    const { data } = await api.post<ApiResponse<AuthRegisterResponse>>(
+    const { data } = await api.post<AuthRegisterResponse>(
       "/api/auth/register",
       input,
     );
-    return data.data;
+    return data;
   },
 
   async login(input: LoginInput): Promise<AuthLoginResponse> {
-    const { data } = await api.post<ApiResponse<AuthLoginResponse>>(
+    const { data } = await api.post<AuthLoginResponse>(
       "/api/auth/login",
       input,
     );
-    return data.data;
+    return data;
   },
 
   async logout(refreshToken?: string): Promise<void> {
     await api.post("/api/auth/logout", { refreshToken });
   },
 
-  async refreshToken(
-    input: RefreshTokenInput,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
-    const { data } = await api.post<
-      ApiResponse<{ accessToken: string; refreshToken: string }>
-    >("/api/auth/refresh-token", input);
+  async refreshToken(input: RefreshTokenInput): Promise<{ accessToken: string; refreshToken: string }> {
+    const { data } = await api.post<ApiResponse<{ accessToken: string; refreshToken: string }>>(
+      "/api/auth/refresh-token",
+      input,
+    );
     return data.data;
   },
 

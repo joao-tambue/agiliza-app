@@ -1,6 +1,6 @@
 import { Button, Chip, Input } from "@/components";
 import { useRegister } from "@/hooks/useAuth";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Lock, Phone, User } from "lucide-react-native";
 import React, { useState } from "react";
@@ -15,9 +15,9 @@ import {
 } from "react-native";
 import type { UserRole } from "@/api/types";
 
-const roleOptions: { key: UserRole; label: string; description: string }[] = [
-  { key: "CLIENT", label: "Cliente", description: "Contratar servicos" },
-  { key: "LAVADEIRA", label: "Lavadeira", description: "Oferecer servicos" },
+const roleOptions: { key: UserRole; label: string }[] = [
+  { key: "CLIENT", label: "Cliente" },
+  { key: "LAVADEIRA", label: "Lavadeira" },
 ];
 
 export default function RegisterScreen() {
@@ -25,10 +25,16 @@ export default function RegisterScreen() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<UserRole>("CLIENT");
-  const { handleRegister, isLoading, error } = useRegister();
+  const { handleRegister, isLoading, error, successMessage } = useRegister();
+  const router = useRouter();
 
   function handleRegisterPress() {
-    handleRegister({ name, phone, password, role });
+    handleRegister({ name, phone, password, role }).then(() => {
+      router.push({
+        pathname: "/(auth)/verify-phone",
+        params: { phone },
+      });
+    });
   }
 
   return (
@@ -70,6 +76,14 @@ export default function RegisterScreen() {
                 <View className="mb-3 rounded-lg bg-red-50 px-4 py-3">
                   <Text className="text-center text-sm text-red-600">
                     {error}
+                  </Text>
+                </View>
+              )}
+
+              {successMessage && (
+                <View className="mb-3 rounded-lg bg-green-50 px-4 py-3">
+                  <Text className="text-center text-sm text-green-600">
+                    {successMessage}
                   </Text>
                 </View>
               )}

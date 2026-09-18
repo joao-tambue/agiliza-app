@@ -65,7 +65,7 @@ export default function VerifyPhoneScreen() {
             </Text>
 
             <Text className="mb-8 text-center text-sm text-neutral-500">
-              Enviamos um codigo de 6 digitos para
+              Enviamos um codigo de verificacao para
               {params.phone ? ` ${params.phone}` : " o seu telefone"}.{"\n"}
               Insira o codigo abaixo.
             </Text>
@@ -89,9 +89,9 @@ export default function VerifyPhoneScreen() {
 
               <Input
                 label="Codigo de verificacao"
-                placeholder="Digite o codigo de 6 digitos"
-                keyboardType="number-pad"
-                maxLength={6}
+                placeholder="Cole o codigo recebido por SMS"
+                autoCapitalize="characters"
+                autoCorrect={false}
                 value={token}
                 onChangeText={setToken}
               />

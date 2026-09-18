@@ -1,6 +1,5 @@
 import { Button, Input } from "@/components";
-import { useLogin } from "@/hooks/useAuth";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Lock, Phone } from "lucide-react-native";
 import React, { useState } from "react";
@@ -16,10 +15,16 @@ import {
 export default function LoginScreen() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const { handleLogin, isLoading, error } = useLogin();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   function handleLoginPress() {
-    handleLogin(phone, password);
+    setLoading(true);
+    // TODO: reativar chamada de API quando o auth estiver pronto
+    setTimeout(() => {
+      setLoading(false);
+      router.replace("/(main)");
+    }, 300);
   }
 
   return (
@@ -66,14 +71,6 @@ export default function LoginScreen() {
             </Text>
 
             <View className="w-full">
-              {error && (
-                <View className="mb-3 rounded-lg bg-red-50 px-4 py-3">
-                  <Text className="text-center text-sm text-red-600">
-                    {error}
-                  </Text>
-                </View>
-              )}
-
               <Input
                 label="Numero de telefone"
                 placeholder="9XX XXX XXX"
@@ -104,7 +101,7 @@ export default function LoginScreen() {
               <Button
                 title="Entrar"
                 fullWidth
-                loading={isLoading}
+                loading={loading}
                 onPress={handleLoginPress}
               />
             </View>

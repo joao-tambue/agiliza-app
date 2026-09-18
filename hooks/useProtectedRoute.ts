@@ -25,10 +25,11 @@ export function useProtectedRoute() {
 
     const inAuthGroup = segments[0] === "(auth)";
 
-    if (!isAuthenticated && !inAuthGroup) {
-      router.replace("/(auth)/login");
-    } else if (isAuthenticated && inAuthGroup) {
-      router.replace("/(main)");
-    }
+    // TODO: reativar protecao de rotas quando o auth estiver pronto
+    // if (!isAuthenticated && !inAuthGroup) {
+    //   router.replace("/(auth)/login");
+    // } else if (isAuthenticated && inAuthGroup) {
+    //   router.replace("/(main)");
+    // }
   }, [isAuthenticated, isInitialized, segments, isLayoutReady, router]);
 }

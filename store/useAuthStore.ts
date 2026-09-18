@@ -2,11 +2,8 @@ import { create } from "zustand";
 import { authApi } from "../api/auth";
 import { tokenStorage } from "../api/client";
 import type {
-  AuthLoginResponse,
-  AuthRegisterResponse,
   RegisterInput,
   User,
-  UserRole,
 } from "../api/types";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -20,7 +17,7 @@ export interface AuthState {
 
 export interface AuthActions {
   login: (phone: string, password: string) => Promise<void>;
-  register: (input: RegisterInput) => Promise<AuthRegisterResponse>;
+  register: (input: RegisterInput) => Promise<string>;
   logout: () => Promise<void>;
   forgotPassword: (phone: string) => Promise<void>;
   resetPassword: (token: string, password: string) => Promise<void>;
@@ -30,18 +27,6 @@ export interface AuthActions {
 }
 
 export type AuthStore = AuthState & AuthActions;
-
-// ─── Helper ───────────────────────────────────────────────────────────────────
-
-function mapUser(apiUser: User): User {
-  return {
-    id: apiUser.id,
-    name: apiUser.name,
-    phone: apiUser.phone,
-    role: apiUser.role,
-    status: apiUser.status,
-  };
-}
 
 // ─── Store ────────────────────────────────────────────────────────────────────
 
@@ -61,7 +46,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
       const user = await authApi.getMe();
       set({
-        user: mapUser(user),
+        user,
         isAuthenticated: true,
         isInitialized: true,
       });
@@ -74,16 +59,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
   login: async (phone: string, password: string) => {
     set({ isLoading: true });
     try {
-      const response: AuthLoginResponse = await authApi.login({
-        phone,
-        password,
-      });
+      const response = await authApi.login({ phone, password });
+
+      if (!response.success || !response.data) {
+        throw new Error(response.message || "Credenciais invalidas");
+      }
+
       await tokenStorage.setTokens(
-        response.accessToken,
-        response.refreshToken,
+        response.data.accessToken,
+        response.data.refreshToken,
       );
       set({
-        user: mapUser(response.user),
+        user: response.data.user,
         isAuthenticated: true,
         isLoading: false,
       });
@@ -96,17 +83,14 @@ export const useAuthStore = create<AuthStore>((set) => ({
   register: async (input: RegisterInput) => {
     set({ isLoading: true });
     try {
-      const response: AuthRegisterResponse = await authApi.register(input);
-      await tokenStorage.setTokens(
-        response.accessToken,
-        response.refreshToken,
-      );
-      set({
-        user: mapUser(response.user),
-        isAuthenticated: true,
-        isLoading: false,
-      });
-      return response;
+      const response = await authApi.register(input);
+
+      if (!response.success) {
+        throw new Error(response.message || "Erro ao criar conta");
+      }
+
+      set({ isLoading: false });
+      return response.message;
     } catch (error) {
       set({ isLoading: false });
       throw error;
@@ -164,6 +148,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
 
   updateUser: (user: User) => {
-    set({ user: mapUser(user) });
+    set({ user });
   },
 }));

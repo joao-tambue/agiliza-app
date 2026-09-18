@@ -3,7 +3,6 @@ import { useAuthStore } from "../store/useAuthStore";
 import type { RegisterInput } from "../api/types";
 
 // ─── useAuth ──────────────────────────────────────────────────────────────────
-// Main hook for auth state and actions.
 
 export function useAuth() {
   const store = useAuthStore();
@@ -23,7 +22,6 @@ export function useAuth() {
 }
 
 // ─── useLogin ─────────────────────────────────────────────────────────────────
-// Hook for login screen with local form state.
 
 export function useLogin() {
   const { login, isLoading } = useAuthStore();
@@ -47,17 +45,19 @@ export function useLogin() {
 }
 
 // ─── useRegister ──────────────────────────────────────────────────────────────
-// Hook for register screen with local form state.
 
 export function useRegister() {
   const { register, isLoading } = useAuthStore();
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleRegister = useCallback(
     async (input: RegisterInput) => {
       setError(null);
+      setSuccessMessage(null);
       try {
-        await register(input);
+        const message = await register(input);
+        setSuccessMessage(message);
       } catch (err: unknown) {
         const message = getErrorMessage(err);
         setError(message);
@@ -67,11 +67,10 @@ export function useRegister() {
     [register],
   );
 
-  return { handleRegister, isLoading, error, setError };
+  return { handleRegister, isLoading, error, setError, successMessage };
 }
 
 // ─── useForgotPassword ────────────────────────────────────────────────────────
-// Hook for forgot password screen.
 
 export function useForgotPassword() {
   const { forgotPassword, isLoading } = useAuthStore();
@@ -98,7 +97,6 @@ export function useForgotPassword() {
 }
 
 // ─── useResetPassword ─────────────────────────────────────────────────────────
-// Hook for reset password screen.
 
 export function useResetPassword() {
   const { resetPassword, isLoading } = useAuthStore();
@@ -125,7 +123,6 @@ export function useResetPassword() {
 }
 
 // ─── useVerifyPhone ───────────────────────────────────────────────────────────
-// Hook for phone verification screen.
 
 export function useVerifyPhone() {
   const { verifyPhone, isLoading } = useAuthStore();

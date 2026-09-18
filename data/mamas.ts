@@ -16,7 +16,7 @@ export interface Mama {
 export const mamas: Mama[] = [
   {
     id: 1,
-    name: "Mama Maria",
+    name: "Maria Fernandes",
     location: "Vila de Cacuaco",
     profession: "Lavadeira",
     rating: 5.0,
@@ -30,7 +30,7 @@ export const mamas: Mama[] = [
   },
   {
     id: 2,
-    name: "Mama Joana",
+    name: "Joana Neto",
     location: "Vila de Benfica",
     profession: "Lavadeira",
     rating: 4.9,
@@ -44,7 +44,7 @@ export const mamas: Mama[] = [
   },
   {
     id: 3,
-    name: "Mama Rosa",
+    name: "Rosa Domingos",
     location: "Vila de Viana",
     profession: "Lavadeira",
     rating: 4.7,
@@ -58,7 +58,7 @@ export const mamas: Mama[] = [
   },
   {
     id: 4,
-    name: "Mama Odeth",
+    name: "Odete Kiala",
     location: "Vila de Cacuaco",
     profession: "Lavadeira",
     rating: 4.5,
@@ -72,7 +72,7 @@ export const mamas: Mama[] = [
   },
   {
     id: 5,
-    name: "Mama Priss",
+    name: "Priscila Sousa",
     location: "Vila de Viana",
     profession: "Lavadeira",
     rating: 4.8,

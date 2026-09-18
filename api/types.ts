@@ -24,15 +24,18 @@ export interface AuthTokens {
 }
 
 export interface AuthLoginResponse {
-  user: User;
-  accessToken: string;
-  refreshToken: string;
+  success: boolean;
+  message?: string;
+  data?: {
+    user: User;
+    accessToken: string;
+    refreshToken: string;
+  };
 }
 
 export interface AuthRegisterResponse {
-  user: User;
-  accessToken: string;
-  refreshToken: string;
+  success: boolean;
+  message: string;
 }
 
 export interface RegisterInput {
